@@ -26,3 +26,12 @@ class BookViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     ...
 
+from rest_framework import generics
+from .models import Book  # Import your model
+from .serializers import BookSerializer  # Import your serializer
+
+class BookListView(generics.ListAPIView):
+    queryset = Book.objects.all()  # Queryset to retrieve all books
+    serializer_class = BookSerializer  # Serializer to convert model instances to JSON
+
+
