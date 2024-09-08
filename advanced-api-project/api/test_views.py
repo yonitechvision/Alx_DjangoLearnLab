@@ -6,6 +6,22 @@ from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 
 
+
+class BookAPITestCase(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username='testuser',
+            password='password'
+        )
+        self.client = Client()
+
+    def test_some_view(self):
+        self.client.login(username='testuser', password='password')
+        response = self.client.get('/some-url/')
+        self.assertEqual(response.status_code, 200)
+
+
+
 class BookAPITestCase(APITestCase):
     def setUp(self):
         self.author = Author.objects.create(name="J.K. Rowling")
