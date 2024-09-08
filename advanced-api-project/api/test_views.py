@@ -2,6 +2,9 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
 from .models import Book, Author
+from django.test import TestCase
+from django.contrib.auth import get_user_model
+
 
 class BookAPITestCase(APITestCase):
     def setUp(self):
@@ -11,6 +14,8 @@ class BookAPITestCase(APITestCase):
             publication_year=1997,
             author=self.author
         )
+        self.client = Client()
+
         self.book_url = reverse('book-detail', kwargs={'pk': self.book.id})
 def test_create_book(self):
     url = reverse('book-list')
