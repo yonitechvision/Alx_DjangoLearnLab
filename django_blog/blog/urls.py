@@ -19,4 +19,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(), name='login'),  # Add this line
     path('post/<int:post_id>/comments/new/', CommentCreateView.as_view(), name='add-comment'),
     path('tags/<slug:tag_slug>/', PostByTagListView.as_view(), name='post_by_tag'),
+    ath('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment_update'),
+    path('post/<int:pk>/comments/new/', CommentCreateView.as_view(), name='comment_create'),
+    path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment_delete'),
 ]
