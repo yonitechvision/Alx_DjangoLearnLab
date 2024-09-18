@@ -110,3 +110,28 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return self.object.post.get_absolute_url()
+
+from django.shortcuts import render
+from .models import Post
+from taggit.models import Tag  # If you are using django-taggit
+
+def post_list_view(request):
+    query = request.GET.get('q')
+    posts = Post.objects.all()
+
+    if query:
+        # Filter posts by title, content, or tags
+        posts = Post.objects.filter(
+            title__icontains=query
+        ) | Post.objects.filter(
+            content__icontains=query
+        ) | Post.objects.filter(
+            tags__name__icontains=query  # Assuming you are using tags with django-taggit
+        )
+
+    context = {
+        'posts': posts,
+        'query': query
+    }
+    return render(request, 'post_list.html', context)
+
