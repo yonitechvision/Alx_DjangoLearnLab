@@ -16,4 +16,5 @@ urlpatterns = [
     path('comments/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment-delete'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('login/', auth_views.LoginView.as_view(), name='login'),  # Add this line
+    path('post/<int:post_id>/comments/new/', CommentCreateView.as_view(), name='add-comment'),
 ]
