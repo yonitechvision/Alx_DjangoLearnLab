@@ -53,6 +53,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     fields = ['title', 'content']
     template_name = 'blog/post_form.html'
+    success_url = reverse_lazy('post_list')  # Redirect after update
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -66,6 +67,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     success_url = reverse_lazy('post-list')
     template_name = 'blog/post_confirm_delete.html'
+    success_url = reverse_lazy('post_list')  # Redirect after deletion
 
     def test_func(self):
         post = self.get_object()
@@ -111,6 +113,12 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return self.object.post.get_absolute_url()
+@method_decorator(login_required, name='dispatch')
+class PostCreateView(CreateView):
+    model = Post
+    fields = ['title', 'content']  # Specify the fields for the new post
+    template_name = 'post_form.html'
+    success_url = reverse_lazy('post_list')  # Redirect after creation
 
 from django.shortcuts import render
 from .models import Post
