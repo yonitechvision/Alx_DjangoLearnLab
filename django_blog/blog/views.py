@@ -2,12 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView,  CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm, User
+from django.contrib.auth import login, authenticate
 from django.urls import reverse
 from django.urls import reverse_lazy
 from .forms import CustomUserCreationForm, CommentForm
 from .models import Post, Comment
+from taggit.models import Tag
+from django.db.models import 
 
 # Home page
 def home(request):
@@ -143,4 +145,25 @@ def post_list_view(request):
         'query': query
     }
     return render(request, 'post_list.html', context)
+
+def search_posts(request):
+    query = request.GET.get('q')
+    if query:
+        posts = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tagsnameicontains=query)
+        ).distinct()
+    else:
+        posts = Post.objects.none()
+
+    return render(request, 'blog/search_results.html', {'posts': posts, 'query': query})
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/post_list_by_tag.html'
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        return Post.objects.filter(tags__slug=tag_slug)
 
