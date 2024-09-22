@@ -10,6 +10,7 @@ from .forms import CustomUserCreationForm, CommentForm
 from .models import Post, Comment
 from taggit.models import Tag
 from django.db.models import 
+from django.contrib.auth.decorators import login_required
 
 # Home page
 def home(request):
